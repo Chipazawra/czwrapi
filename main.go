@@ -1,7 +1,7 @@
 package main
 
 import (
-	samplegin "github.com/Chipazawra/czwrapi/webapi/sample-gin"
+	samplegin "github.com/Chipazawra/czwrapi/cmd/sample-gin"
 )
 
 func main() {

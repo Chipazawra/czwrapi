@@ -1,6 +1,6 @@
 module github.com/Chipazawra/czwrapi
 
-replace github.com/Chipazawra/czwrapi/webapi/sample-gin => ./webapi/sample-gin
+replace github.com/Chipazawra/czwrapi/cmd/sample-gin => ./cmd/sample-gin
 
 go 1.17
 
