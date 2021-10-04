@@ -4,7 +4,18 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-openapi/runtime/middleware"
 )
+
+// A list of albums returns in the response
+// swagger:response albumsResponse
+type albumsResponseWrapper struct {
+	// All albums in the system
+	// in: body
+	doby []album
+}
+
+// swagger:model
 
 // album represents data about a record album.
 type album struct {
@@ -20,6 +31,11 @@ var albums = []album{
 	{ID: "2", Title: "Jeru", Artist: "Gerry Mulligan", Price: 17.99},
 	{ID: "3", Title: "Sarah Vaughan and Clifford Brown", Artist: "Sarah Vaughan", Price: 39.99},
 }
+
+// swagger:route GET /albums albums listAlbums
+// Returns a list of albums
+// responses:
+// 	200: albumsResponse
 
 // getAlbums responds with the list of all albums as JSON.
 func GetAlbums(c *gin.Context) {
@@ -59,8 +75,31 @@ func getAlbumByID(c *gin.Context) {
 
 func Run() {
 	router := gin.Default()
+	// swagger:route GET /albums albums listalbums
+	//
+	// Lists albums filtered by some parameters.
+	//
+	// This will show all available albums by default.
+	// You can get the albums that are out of stock
+	//
+	//     Consumes:
+	//     - application/json
+	//
+	//     Produces:
+	//     - application/json
+	//
+	//     Schemes: http
+	//
+	//     Responses:
+	//       200: albumsResponse
 	router.GET("/albums", GetAlbums)
 	router.GET("/albums/:id", getAlbumByID)
 	router.POST("/albums", postAlbums)
+	router.StaticFile("/swagger.yaml", "../../api/swagger.yaml")
+
+	opts := middleware.RedocOpts{SpecURL: "swagger.yaml"}
+	sh := middleware.Redoc(opts, nil)
+	router.GET("/docs", gin.WrapH(sh))
+
 	router.Run("localhost:8080")
 }

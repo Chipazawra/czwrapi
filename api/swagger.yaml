@@ -1,0 +1,58 @@
+basePath: /
+consumes:
+- application/json
+definitions:
+  album:
+    properties:
+      artist:
+        type: string
+        x-go-name: Artist
+      id:
+        type: string
+        x-go-name: ID
+      price:
+        format: double
+        type: number
+        x-go-name: Price
+      title:
+        type: string
+        x-go-name: Title
+    title: album represents data about a record album.
+    type: object
+    x-go-package: _/C_/Users/a.hmelev/golang/TheIntegerKnapsackProblemSolve/WebApi/internal/sample-gin
+host: localhost
+info:
+  description: Documentation fo Product API
+  title: albums API.
+  version: 1.0.0
+paths:
+  /albums:
+    get:
+      consumes:
+      - application/json
+      description: |-
+        This will show all available albums by default.
+        You can get the albums that are out of stock
+      operationId: listalbums
+      produces:
+      - application/json
+      responses:
+        "200":
+          $ref: '#/responses/albumsResponse'
+      schemes:
+      - http
+      summary: Lists albums filtered by some parameters.
+      tags:
+      - albums
+produces:
+- application/json
+responses:
+  albumsResponse:
+    description: A list of albums returns in the response
+    schema:
+      items:
+        $ref: '#/definitions/album'
+      type: array
+schemes:
+- http
+swagger: "2.0"
