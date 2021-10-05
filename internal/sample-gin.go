@@ -3,7 +3,10 @@ package samplegin
 import (
 	"net/http"
 
+	_ "github.com/Chipazawra/czwrapi/api"
 	"github.com/gin-gonic/gin"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/swaggo/gin-swagger/swaggerFiles"
 )
 
 // album represents data about a record album.
@@ -21,7 +24,13 @@ var albums = []album{
 	{ID: "3", Title: "Sarah Vaughan and Clifford Brown", Artist: "Sarah Vaughan", Price: 39.99},
 }
 
-// getAlbums responds with the list of all albums as JSON.
+// getAlbums godoc
+// @Summary responds with the list of all albums as JSON.
+// @Description get albums
+// @Accept  json
+// @Produce  json
+// @Success 200 {array} album
+// @Router /albums [get]
 func GetAlbums(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, albums)
 }
@@ -57,10 +66,29 @@ func getAlbumByID(c *gin.Context) {
 	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "album not found"})
 }
 
+// @title Swagger Example API
+// @version 1.0
+// @description This is a sample server celler server.
+// @termsOfService http://swagger.io/terms/
+
+// @contact.name API Support
+// @contact.url http://www.swagger.io/support
+// @contact.email support@swagger.io
+
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host localhost:8080
+// @BasePath /
+
+// @x-extension-openapi {"example": "value on a json format"}
 func Run() {
 	router := gin.Default()
+
 	router.GET("/albums", GetAlbums)
 	router.GET("/albums/:id", getAlbumByID)
 	router.POST("/albums", postAlbums)
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
 	router.Run("localhost:8080")
 }
